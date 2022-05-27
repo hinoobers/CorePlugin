@@ -1,0 +1,21 @@
+database:
+  type: 'mysql'
+  mysql:
+    host: 'localhost'
+    port: 3306
+    database: 'test'
+    username: 'root'
+    password: 'root'
+    ssl: false
+  sqlite:
+    path: '%plugindatafolder%/sqlite.db'
+spawn:
+  on-join: true
+  location:
+    world: 'world'
+    x: 0
+    y: 0
+    z: 0
+    yaw: 0
+    pitch: 0
+    set: false

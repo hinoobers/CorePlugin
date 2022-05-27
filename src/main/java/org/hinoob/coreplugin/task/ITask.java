@@ -5,4 +5,5 @@ import org.hinoob.coreplugin.CorePlugin;
 public interface ITask {
 
     void register(CorePlugin corePlugin);
+    void stop();
 }

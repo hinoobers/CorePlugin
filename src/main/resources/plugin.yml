@@ -1,0 +1,3 @@
+main: org.hinoob.coreplugin.CorePlugin
+version: 0.1
+name: CorePlugin
