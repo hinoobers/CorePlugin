@@ -16,7 +16,7 @@ public class PlayerJoinListener implements IListener, Listener {
     public void onJoin(PlayerJoinEvent event){
         UserManager.getUser(event.getPlayer().getUniqueId()).load();
 
-        if((boolean)ConfigManager.get("spawn.on-join") && (boolean)ConfigManager.get(ConfigManager.get("spawn.location.set"))){
+        if((boolean)ConfigManager.get("spawn.on-join") && (boolean)ConfigManager.get("spawn.location.set")){
             event.getPlayer().teleport(ConfigUtil.getLocation(ConfigManager.get("spawn.location")));
         }
     }

@@ -1,5 +1,7 @@
 package org.hinoob.coreplugin;
 
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.PaperCommandManager;
 import lombok.Getter;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -35,6 +37,18 @@ public class CorePlugin extends JavaPlugin {
                 stopRunnables.add(task::stop); // So it will be stopped when the plugin is disabled
             }catch(Exception ex){
                 getLogger().warning("Failed to register task: " + taskClass.getName());
+            }
+        }
+
+        // register commands
+        PaperCommandManager commandManager = new PaperCommandManager(this);
+        for(Class<?> commandClass : new Reflections("org.hinoob.coreplugin.command").getSubTypesOf(BaseCommand.class)){
+            try {
+                BaseCommand command = (BaseCommand) commandClass.newInstance();
+                commandManager.registerCommand(command);
+                stopRunnables.add(() -> commandManager.unregisterCommand(command));
+            }catch(Exception ex){
+                getLogger().warning("Failed to register command: " + commandClass.getName());
             }
         }
 

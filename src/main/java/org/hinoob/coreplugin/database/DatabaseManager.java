@@ -28,8 +28,13 @@ public class DatabaseManager {
             path = path.replaceAll("%plugindatafolder%", corePlugin.getDataFolder().getAbsolutePath());
             this.currentDatabase = new SQLite(new File(path));
         }
-
+        if(currentDatabase == null) return;
         currentDatabase.init(corePlugin);
+
+        if(currentDatabase instanceof SQL){
+            SQL sql = (SQL) currentDatabase;
+            sql.executeUpdate("CREATE TABLE IF NOT EXISTS `users` (`uuid` VARCHAR(255));");
+        }
     }
 
     public boolean hasAvailableDatabase() {
