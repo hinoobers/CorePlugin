@@ -6,6 +6,8 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.List;
+
 public class ConfigUtil {
 
     public static Location getLocation(ConfigurationSection section) {
@@ -23,5 +25,14 @@ public class ConfigUtil {
         float yaw = (float) section.getDouble("yaw");
         float pitch = (float) section.getDouble("pitch");
         return new Location(world, x, y, z, yaw, pitch);
+    }
+
+    public static boolean isListEmpty(List<String> str){
+        // actually check
+        if(str.isEmpty()) return true;
+        if(str.stream().filter(s -> s.replaceAll(" ", "").isEmpty()).count() == 0) return true;
+        if(str.stream().allMatch(s -> s.length() == 0)) return true;
+
+        return false;
     }
 }

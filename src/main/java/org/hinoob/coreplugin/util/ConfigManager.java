@@ -1,17 +1,18 @@
 package org.hinoob.coreplugin.util;
 
 import lombok.experimental.UtilityClass;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
+import org.bukkit.*;
 import org.hinoob.coreplugin.CorePlugin;
 
 @UtilityClass
 public class ConfigManager {
 
     public <T> T get(String key) {
-        return (T) CorePlugin.getInstance().getConfig().get(key);
+        T obj =  (T) CorePlugin.getInstance().getConfig().get(key);
+        if(obj instanceof String){
+            return (T) ChatColor.translateAlternateColorCodes('&', (String) obj);
+        }
+        return obj;
     }
 
     public void set(String key, Object value) {

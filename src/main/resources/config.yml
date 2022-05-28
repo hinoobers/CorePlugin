@@ -9,6 +9,11 @@ database:
     ssl: false
   sqlite:
     path: '%plugindatafolder%/sqlite.db'
+lockdown:
+  enabled: false
+  message: '&cServer is under lockdown!'
+  whitelist: # takes uuids
+    - ''
 spawn:
   on-join: true
   location:
