@@ -9,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.hinoob.coreplugin.database.DatabaseManager;
 import org.hinoob.coreplugin.listener.IListener;
 import org.hinoob.coreplugin.module.IModule;
-import org.hinoob.coreplugin.task.ITask;
+import org.hinoob.coreplugin.module.Module;
 import org.hinoob.coreplugin.util.ReflectionUtil;
 import org.reflections.Reflections;
 
@@ -31,17 +31,6 @@ public class CorePlugin extends JavaPlugin {
         instance = this;
         saveDefaultConfig();
 
-        // register tasks
-        for(Class<?> taskClass : new Reflections("org.hinoob.coreplugin.task.impl").getSubTypesOf(ITask.class)){
-            try {
-                ITask task = (ITask) taskClass.newInstance();
-                task.register(this);
-                stopRunnables.add(task::stop); // So it will be stopped when the plugin is disabled
-            }catch(Exception ex){
-                getLogger().warning("Failed to register task: " + taskClass.getName());
-            }
-        }
-
         // register commands
         PaperCommandManager commandManager = new PaperCommandManager(this);
         for(Class<?> commandClass : new Reflections("org.hinoob.coreplugin.command").getSubTypesOf(BaseCommand.class)){
@@ -59,8 +48,12 @@ public class CorePlugin extends JavaPlugin {
             try {
                 IModule module = (IModule) moduleClass.newInstance();
                 module.init(this);
+                module.startTicking(this.getServer().getScheduler());
 
+                stopRunnables.add(() -> ((Module)module).stopRunnable());
                 modules.add(module);
+
+                getLogger().info("Registered module: " + moduleClass.getName());
             }catch(Exception ex){
                 getLogger().warning("Failed to register module: " + moduleClass.getName());
             }
