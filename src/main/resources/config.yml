@@ -14,6 +14,9 @@ lockdown:
   message: '&cServer is under lockdown!'
   whitelist: # takes uuids
     - ''
+world:
+  pre-load: # worlds that are loaded right after the server starts
+    - 'world'
 spawn:
   on-join: true
   location:

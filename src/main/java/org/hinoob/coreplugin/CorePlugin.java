@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hinoob.coreplugin.database.DatabaseManager;
 import org.hinoob.coreplugin.listener.IListener;
+import org.hinoob.coreplugin.module.IModule;
 import org.hinoob.coreplugin.task.ITask;
 import org.hinoob.coreplugin.util.ReflectionUtil;
 import org.reflections.Reflections;
@@ -23,6 +24,7 @@ public class CorePlugin extends JavaPlugin {
 
     @Getter private DatabaseManager databaseManager = new DatabaseManager();
     private List<Runnable> stopRunnables = new ArrayList<>();
+    @Getter private List<IModule> modules = new ArrayList<>();
 
     @Override
     public void onEnable(){
@@ -49,6 +51,18 @@ public class CorePlugin extends JavaPlugin {
                 stopRunnables.add(() -> commandManager.unregisterCommand(command));
             }catch(Exception ex){
                 getLogger().warning("Failed to register command: " + commandClass.getName());
+            }
+        }
+
+        // register modules
+        for(Class<?> moduleClass : new Reflections("org.hinoob.coreplugin.module").getSubTypesOf(IModule.class)){
+            try {
+                IModule module = (IModule) moduleClass.newInstance();
+                module.init(this);
+
+                modules.add(module);
+            }catch(Exception ex){
+                getLogger().warning("Failed to register module: " + moduleClass.getName());
             }
         }
 
